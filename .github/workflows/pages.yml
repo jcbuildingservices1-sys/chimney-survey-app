@@ -26,6 +26,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Create iPhone Home Screen icon from approved artwork
+        run: |
+          python3 -m venv /tmp/chimney-icon-venv
+          /tmp/chimney-icon-venv/bin/pip install --quiet cairosvg
+          /tmp/chimney-icon-venv/bin/python - <<'PY'
+          import cairosvg
+          cairosvg.svg2png(url='icon.svg',write_to='icon.png',output_width=180,output_height=180)
+          PY
+          test -s icon.png
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
